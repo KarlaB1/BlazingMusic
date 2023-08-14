@@ -23,7 +23,7 @@ namespace BlazingMusic.Shared.DataContexts
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=KARLA;Initial Catalog=Musics;Integrated Security=True;TrustServerCertificate=True");
+                optionsBuilder.UseSqlServer("Data Source=chuerkislove.database.windows.net;Initial Catalog=Musics;User ID=kipis;Password=Tilines69#;Connect Timeout=60;Encrypt=True;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
             }
             base.OnConfiguring(optionsBuilder);
         }
