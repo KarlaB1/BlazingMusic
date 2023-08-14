@@ -1,0 +1,13 @@
+﻿@page "/music/view/{musicId:int}"
+@using BlazingMusic.Shared.Models
+@inject HttpClient Http
+
+<MusicInfo MusicId="musicId" HeaderText="Vista de Música" Music="music" ReadOnlyMode=true></MusicInfo>
+
+@code {
+    [Parameter] public int musicId { get; set; }
+
+    private Music music = new Music();
+
+    protected override async Task OnInitializedAsync() => music = await Http.GetFromJsonAsync<Music>($"/api/music/getmusic/{musicId}");
+}

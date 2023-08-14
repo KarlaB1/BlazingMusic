@@ -1,0 +1,27 @@
+-- Crea la base de datos "Musics"
+CREATE DATABASE Musics;
+
+-- Usa la base de datos "Musics"
+USE Musics;
+
+-- Crea la tabla "Music" con MusicId como autoincremento
+CREATE TABLE Music (
+    MusicId INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(255),
+    Artist NVARCHAR(255),
+    Duration FLOAT,
+    LaunchDate DATE,
+    RecordLabel NVARCHAR(255)
+);
+
+select * from Music;
+
+INSERT INTO Music (Name, Artist, Duration, LaunchDate, RecordLabel)
+VALUES ('Lambs Wool', 'Foster The People', 4.35, '2020-10-10', 'Sony');
+
+INSERT INTO Music (Name, Artist, Duration, LaunchDate, RecordLabel)
+VALUES ('Night Rider', 'Joji', 2.07, '2022-11-08', '888rising');
+
+
+INSERT INTO Music (Name, Artist, Duration, LaunchDate, RecordLabel)
+VALUES ('If i fell', 'The Beatles', 1.19, '1964-05-12', 'Universal');

@@ -1,0 +1,82 @@
+﻿@page "/"
+@using BlazingMusic.Shared.Models
+@inject HttpClient Http
+@inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
+
+<h3>Lista de Música</h3>
+<div class="table-responsive">
+    <table class="table table-striped table-primary">
+        <thead>
+            <tr>
+                <th class="table-warning">Id</th>
+                <th class="table-warning">Título</th>
+                <th class="table-warning">Artista</th>
+                <th class="table-warning">Duración</th>
+                <th class="table-warning">Fecha de Lanzamiento</th>
+                <th class="table-warning">Discográfica</th>
+                <th class="table-warning">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (musics == null)
+            {
+                <tr>
+                    <td colspan="7" align="center">Datos no encontrados</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var music in musics)
+                {
+                    <tr>
+                        <td class="table-blue">@music.MusicId</td>
+                        <td class="table-blue">@music.Name</td>
+                        <td class="table-blue">@music.Artist</td>
+                        <td class="table-blue">@music.Duration</td>
+                        <td class="table-blue">@music.LaunchDate?.ToShortDateString()</td>
+                        <td class="table-blue">@music.RecordLabel</td>
+                        <td class="table-blue">
+                            <a href="@GetEditMusicViewUrl(@music)" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true">Editar</a>
+                            <a class="btn btn-danger" tabindex="-1" role="button" aria-disabled="true" @onclick="_ => DeleteMusic(music)">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<h4 style="color:blue;">
+    ¿Quieres agregar una nueva canción? Haz clic <a href="/music/create">aquí</a>.
+</h4>
+@code {
+    private Music[]? musics;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchMusics();
+    }
+
+    private string GetEditMusicViewUrl(Music music)
+    {
+        return $"music/edit/{music.MusicId}";
+    }
+
+    private async Task DeleteMusic(Music music)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", $"¿Estás seguro de eliminar esta canción: {music.MusicId}?"); // Confirm
+        if (confirmed)
+        {
+            var result = await Http.DeleteAsync($"/api/music/deletemusic/{music.MusicId}");
+            if (result != null && result.StatusCode == System.Net.HttpStatusCode.NoContent)
+            {
+                await FetchMusics();
+            }
+        }
+    }
+
+    private async Task FetchMusics()
+    {
+        musics = await Http.GetFromJsonAsync<Music[]>("/api/music/getmusics");
+    }
+}

@@ -1,0 +1,44 @@
+﻿@page "/music/create"
+@page "/music/edit/{musicId:int}"
+@using BlazingMusic.Shared.Models
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+@if (MusicId > 0)
+{
+    <MusicInfo MusicId="MusicId" HeaderText="Actualizar Música" Music="music" OnValidSubmit="UpdateMusic"></MusicInfo>
+}
+else
+{
+    <MusicInfo MusicId="0" HeaderText="Agregar Música" Music="music" OnValidSubmit="CreateMusic"></MusicInfo>
+}
+
+@code {
+    private Music music = new Music();
+
+    [Parameter] public int MusicId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (MusicId > 0)
+            music = await Http.GetFromJsonAsync<Music>($"/api/music/getmusic/{MusicId}");
+    }
+
+    private async Task CreateMusic()
+    {
+        var result = await Http.PostAsJsonAsync("/api/music/createmusic", music);
+        if (result != null && result.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private async Task UpdateMusic()
+    {
+        var result = await Http.PostAsJsonAsync("/api/music/updatemusic", music);
+        if (result != null && result.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}
