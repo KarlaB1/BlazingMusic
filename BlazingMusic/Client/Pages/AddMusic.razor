@@ -4,32 +4,32 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-@if (MusicId > 0)
+@if (musicId > 0)
 {
-    <MusicInfo MusicId="MusicId" HeaderText="Actualizar Música" Music="music" OnValidSubmit="UpdateMusic"></MusicInfo>
+    <MusicInfo MusicId="musicId" HeaderText="Update Music Details" Music="music" OnValidSubmit="UpdateMusic"></MusicInfo>
 }
 else
 {
-    <MusicInfo MusicId="0" HeaderText="Agregar Música" Music="music" OnValidSubmit="CreateMusic"></MusicInfo>
+    <MusicInfo MusicId="0" HeaderText="Add Music Details" Music="music" OnValidSubmit="CreateMusic"></MusicInfo>
 }
 
 @code {
     private Music music = new Music();
 
-    [Parameter] public int MusicId { get; set; }
+    [Parameter] public int musicId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        if (MusicId > 0)
-            music = await Http.GetFromJsonAsync<Music>($"/api/music/getmusic/{MusicId}");
+        if (musicId > 0)
+            music = await Http.GetFromJsonAsync<Music>($"/api/music/getmusic/{musicId}");
     }
 
     private async Task CreateMusic()
     {
-        var result = await Http.PostAsJsonAsync("/api/music/createmusic", music);
+        var result = await Http.PostAsJsonAsync("/api/music/savemusic", music);
         if (result != null && result.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/"); // Redirect to the list page
         }
     }
 
@@ -38,7 +38,7 @@ else
         var result = await Http.PostAsJsonAsync("/api/music/updatemusic", music);
         if (result != null && result.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/"); // Redirect to the list page
         }
     }
 }

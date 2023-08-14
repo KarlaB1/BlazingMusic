@@ -2,53 +2,59 @@
 
 <h3>@HeaderText</h3>
 <hr />
-<div style="width:60%;">
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div style="width: 60%;">
 
-    <EditForm Model="Music" OnValidSubmit="OnValidSubmit">
-        <DataAnnotationsValidator />
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Título</label>
-            <div class="col-sm-10">
-                <InputText type="text" class="form-control" @bind-Value="@Music.Name" disabled="@ReadOnlyMode" />
-                <ValidationMessage For="@(() => Music.Name)" />
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Artista</label>
-            <div class="col-sm-10">
-                <InputText type="text" class="form-control" @bind-Value="@Music.Artist" disabled="@ReadOnlyMode" />
-                <ValidationMessage For="@(() => Music.Artist)" />
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Duración</label>
-            <div class="col-sm-10">
-                <InputNumber class="form-control" step="0.01" @bind-Value="@Music.Duration" disabled="@ReadOnlyMode" />
-                <ValidationMessage For="@(() => Music.Duration)" />
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Fecha de Lanzamiento</label>
-            <div class="col-sm-10">
-                <InputDate class="form-control" @bind-Value="@Music.LaunchDate" disabled="@ReadOnlyMode" />
-                <ValidationMessage For="@(() => Music.LaunchDate)" />
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Discográfica</label>
-            <div class="col-sm-10">
-                <InputText type="text" class="form-control" @bind-Value="@Music.RecordLabel" disabled="@ReadOnlyMode" />
-                <ValidationMessage For="@(() => Music.RecordLabel)" />
-            </div>
-        </div>
-        <a class="btn btn-danger" tabindex="-1" role="button" aria-disabled="true" href="/">Regresar</a>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <EditForm Model="Music" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
 
-        @if (!ReadOnlyMode)
-        {
-            <button type="submit" class="btn btn-primary">@((MusicId > 0) ? "Actualizar" : "Guardar")</button>
-        }
-    </EditForm>
+            <div class="row mb-3">
+                <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <InputText type="text" class="form-control" @bind-Value="@Music.Name" disabled=@ReadOnlyMode />
+                    <ValidationMessage For="@(() => Music.Name)" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputArtist" class="col-sm-2 col-form-label">Artist</label>
+                <div class="col-sm-10">
+                    <InputText type="text" class="form-control" @bind-Value="@Music.Artist" disabled=@ReadOnlyMode />
+                    <ValidationMessage For="@(() => Music.Artist)" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputDuration" class="col-sm-2 col-form-label">Duration</label>
+                <div class="col-sm-10">
+                    <InputText type="text" class="form-control" @bind-Value="@Music.Duration" disabled=@ReadOnlyMode />
+                    <ValidationMessage For="@(() => Music.Duration)" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputLaunchDate" class="col-sm-2 col-form-label">Launch Date</label>
+                <div class="col-sm-10">
+                    <InputDate class="form-control" @bind-Value="@Music.LaunchDate" disabled=@ReadOnlyMode />
+                    <ValidationMessage For="@(() => Music.LaunchDate)" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputRecordLabel" class="col-sm-2 col-form-label">Record Label</label>
+                <div class="col-sm-10">
+                    <InputText type="text" class="form-control" @bind-Value="@Music.RecordLabel" disabled=@ReadOnlyMode />
+                    <ValidationMessage For="@(() => Music.RecordLabel)" />
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a class="btn btn-danger" tabindex="-1" role="button" aria-disabled="true" href="/music">Return to List</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                @if (!ReadOnlyMode)
+                {
+                    <button type="submit" class="btn btn-primary">@(MusicId > 0 ? "Update" : "Save")</button>
+                }
+            </div>
+        </EditForm>
+    </div>
 </div>
 
 @code {
@@ -59,5 +65,10 @@
 
     [Parameter] public EventCallback OnValidSubmit { get; set; }
 
-    // Your initialization code here, if needed.
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        // Your initialization code here, if needed.
+    }
 }

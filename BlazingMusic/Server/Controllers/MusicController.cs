@@ -1,8 +1,11 @@
-﻿using BlazingMusic.Shared.DataContexts;
-using BlazingMusic.Shared.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using BlazingMusic.Shared.Models;
+using BlazingMusic.Shared.DataContexts;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BlazingMusic.Server.Controllers
 {
@@ -10,50 +13,50 @@ namespace BlazingMusic.Server.Controllers
     [ApiController]
     public class MusicController : ControllerBase
     {
-        private readonly SQLDBContext _dbContext; // Reemplaza "YourDbContext" con tu contexto real
+        private readonly SQLDBContext _dbContext;
 
-        public MusicController(SQLDBContext context) // Reemplaza "YourDbContext" con tu contexto real
+        public MusicController(SQLDBContext context)
         {
             _dbContext = context;
         }
 
         [HttpGet]
         [Route("GetMusics")]
-        public async Task<IActionResult> GetMusics()
+        public async Task<IList<Music>> GetMusics()
         {
             try
             {
-                var musics = await _dbContext.Musics.ToListAsync();
-                return Ok(musics);
+                var data = await _dbContext.Musics.ToListAsync();
+                return data;
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                throw ex;
             }
         }
 
         [HttpGet]
         [Route("GetMusic/{id}")]
-        public async Task<IActionResult> GetMusic(int id)
+        public async Task<ActionResult<Music>> GetMusic(int id)
         {
             try
             {
-                var music = await _dbContext.Musics.FindAsync(id);
-                if (music == null)
+                var data = await _dbContext.Musics.FindAsync(id);
+                if (data == null)
                 {
                     return NotFound();
                 }
-                return Ok(music);
+                return data;
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                throw ex;
             }
         }
 
         [HttpPost]
-        [Route("CreateMusic")]
-        public async Task<IActionResult> CreateMusic(Music music)
+        [Route("SaveMusic")]
+        public async Task<IActionResult> SaveMusic(Music music)
         {
             try
             {
@@ -61,14 +64,16 @@ namespace BlazingMusic.Server.Controllers
                 {
                     _dbContext.Add(music);
                     await _dbContext.SaveChangesAsync();
-                    return Ok("Music created successfully!");
+
+                    return Ok("Music saved successfully!");
                 }
-                return BadRequest("Invalid music data.");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                throw ex;
             }
+
+            return NoContent();
         }
 
         [HttpPost]
@@ -99,6 +104,10 @@ namespace BlazingMusic.Server.Controllers
         [Route("DeleteMusic/{id}")]
         public async Task<IActionResult> DeleteMusic(int id)
         {
+            if (_dbContext.Musics == null)
+            {
+                return NotFound();
+            }
             var music = await _dbContext.Musics.FindAsync(id);
             if (music == null)
             {
@@ -113,7 +122,7 @@ namespace BlazingMusic.Server.Controllers
 
         private bool MusicExists(int id)
         {
-            return _dbContext.Musics.Any(e => e.MusicId == id);
+            return (_dbContext.Musics?.Any(e => e.MusicId == id)).GetValueOrDefault();
         }
     }
 }
