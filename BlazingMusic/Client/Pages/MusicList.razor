@@ -4,25 +4,26 @@
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
 
-<h3>Music List</h3>
-<div class="table-responsive">
-    <table class="table table-striped table-primary">
+<div class="container text-center">
+    <p class="h3 pt-3">Lista de canciones</p>
+    <hr class="my-3">
+    <table class="table table-striped-columns table-primary">
         <thead>
             <tr>
-                <th class="table-dark">MusicId</th>
-                <th class="table-dark">Name</th>
-                <th class="table-dark">Artist</th>
-                <th class="table-dark">Duration</th>
-                <th class="table-dark">Launch Date</th>
-                <th class="table-dark">Record Label</th>
-                <th class="table-dark">Actions</th>
+                <th class="table-primary">Id</th>
+                <th class="table-primary">Título</th>
+                <th class="table-primary">Artista</th>
+                <th class="table-primary">Duración</th>
+                <th class="table-primary">Fecha de Lanzamiento</th>
+                <th class="table-primary">Discográfica</th>
+                <th class="table-primary">Acciones</th>
             </tr>
         </thead>
         <tbody>
             @if (musics == null)
             {
                 <tr>
-                    <td colspan="8" align="center">No Data Found</td>
+                    <td colspan="7" align="center">Cargando Datos</td>
                 </tr>
             }
             else
@@ -30,33 +31,25 @@
                 @foreach (var music in musics)
                 {
                     <tr>
-                        <td class="table-dark">@music.MusicId</td>
-                        <td class="table-dark">@music.Name</td>
-                        <td class="table-dark">@music.Artist</td>
-                        <td class="table-dark">@music.Duration</td>
-                        <td class="table-dark">@music.LaunchDate</td>
-                        <td class="table-dark">@music.RecordLabel</td>
-                        <td class="table-dark">
-                            <a href="@GetEditMusicViewUrl(@music)" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                                    <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"></path>
-                                </svg> Edit
-                            </a>
-                            <a class="btn btn-danger" tabindex="-1" role="button" aria-disabled="true" @onclick="_ => DeleteMusic(music)">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                                    <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"></path>
-                                </svg> Delete
-                            </a>
+                        <td class="table-primary">@music.MusicId</td>
+                        <td class="table-primary">@music.Name</td>
+                        <td class="table-primary">@music.Artist</td>
+                        <td class="table-primary">@music.Duration</td>
+                        <td class="table-primary">@music.LaunchDate?.ToShortDateString()</td>
+                        <td class="table-primary">@music.RecordLabel</td>
+                        <td class="table-primary">
+                            <a href="@GetEditMusicViewUrl(@music)" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true">Editar</a>
+                            <a class="btn btn-danger" tabindex="-1" role="button" aria-disabled="true" @onclick="_ => DeleteMusic(music)">Eliminar</a>
                         </td>
                     </tr>
                 }
             }
         </tbody>
     </table>
+    <h4 style="color:blue;">
+        ¿Quieres agregar una nueva canción? Haz clic <a href="/music/create">aquí</a>.
+    </h4>
 </div>
-<h4 style="color:blue;">
-    Want to add a new music? Click <a href="/music/create">Add Music</a>
-</h4>
 
 @code {
     private Music[]? musics;

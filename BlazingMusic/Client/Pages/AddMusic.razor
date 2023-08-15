@@ -6,11 +6,11 @@
 
 @if (musicId > 0)
 {
-    <MusicInfo MusicId="musicId" HeaderText="Update Music Details" Music="music" OnValidSubmit="UpdateMusic"></MusicInfo>
+    <MusicInfo MusicId="musicId" HeaderText="Update Song" Music="music" OnValidSubmit="UpdateMusic"></MusicInfo>
 }
 else
 {
-    <MusicInfo MusicId="0" HeaderText="Add Music Details" Music="music" OnValidSubmit="CreateMusic"></MusicInfo>
+    <MusicInfo MusicId="0" HeaderText="Add New Song" Music="music" OnValidSubmit="CreateMusic"></MusicInfo>
 }
 
 @code {
